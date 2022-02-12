@@ -1,20 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { View } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Please do this.</Text>
-      <StatusBar style="auto" />
+    <View style={{ flex: 1, flexDirection: "row" }}>
+      <View style={{ flex:1, backgroundColor: "tomato"}}></View>
+      <View style={{ flex:1, backgroundColor: "teal"}}></View>
+      <View style={{ flex:1, backgroundColor: "orange"}}></View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+//display : flex, flex-direction: row or column  웹에서는 디스플레이 플렉스를 지정해줘야함
+// 네이티브는 그럴필요가 없이 , 이미 flrx container 임 
+// flex-direction 의 default 는 Column
