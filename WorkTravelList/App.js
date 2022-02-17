@@ -8,8 +8,10 @@ import {
   ScrollView,
   TouchableHighlight,
   TouchableWithoutFeedback,
-  Pressable } from 'react-native';
+  Pressable, 
+  Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Fontisto } from '@expo/vector-icons';
 import { theme } from "./colors"
 import {react, useState, useEffect} from 'react'
 
@@ -22,6 +24,7 @@ export default function App() {
   const travel = () => setWorking(false);
   const work = () => setWorking(true);
   const onChangeText = (payload) => setText(payload);
+
   const saveToDos = async (toSave) => {
     // toDos 를 스트링파이 해주고 저장한다.
     try{
@@ -31,6 +34,7 @@ export default function App() {
       alert(e);
     }
   }
+
   const loadToDos = async () => {
     try {
       const s = await AsyncStorage.getItem(STORAGE_KEY);
@@ -40,9 +44,11 @@ export default function App() {
       alert(e);
     }
   }
+
   useEffect(() => {
     loadToDos()
   }, []);
+
   const addToDo = async () => {
     if(text === ""){
       return 
@@ -56,6 +62,24 @@ export default function App() {
     setToDos(newToDos);
     await saveToDos(newToDos);
     setText(""); 
+  }
+  const deleteToDo = async (key) => {
+    Alert.alert(
+      "Delete To Do", 
+      "Are you sure?", 
+      [
+        { text: "Cancel"},
+        { text: "I'm sure", 
+          style: "destructive", 
+          onPress: async () => {
+          const newToDos = {...toDos}
+          delete newToDos[key]
+          setToDos(newToDos);
+          await saveToDos(newToDos);
+        }}
+      ]);
+      return;
+    
   }
   // console.log(toDos)
   return (
@@ -96,9 +120,11 @@ export default function App() {
             <Text style={styles.toDoText}>
               {toDos[key].text}
             </Text> 
+            <TouchableOpacity onPress={() => deleteToDo(key)}>
+              <Fontisto name="trash" size={18} color="white" />
+            </TouchableOpacity>
           </View> : null
         ))
-
         }
       </ScrollView>
     </View>
@@ -135,6 +161,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20, 
     borderRadius: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   toDoText: {
     color: "white",
